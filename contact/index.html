@@ -573,20 +573,34 @@ body{position:relative!important;}
 </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style id="cm-floatlabel-fix">
-[data-ux="InputFloatLabel"] { margin-bottom: 14px !important; }
-
-[data-ux="InputFloatLabel"] label{
-  position: static !important;
-  transform: none !important;
-  font-size: 14px !important;
-  line-height: 1.2 !important;
-  margin: 0 0 6px 0 !important;
-  display: block !important;
-  opacity: 1 !important;
+/* Works on static pages: keeps label up when focused OR when input has value */
+div[data-ux="InputFloatLabel"]{
+  position: relative !important;
+  margin-bottom: 14px !important;
 }
 
-[data-ux="InputFloatLabel"] input{
-  padding-top: 10px !important;
+div[data-ux="InputFloatLabel"] > input{
+  padding-top: 18px !important;
+  padding-bottom: 8px !important;
+}
+
+div[data-ux="InputFloatLabel"] > label{
+  position: absolute !important;
+  left: 12px !important;
+  top: 12px !important;
+  transform-origin: left top !important;
+  transition: transform .12s ease, top .12s ease, opacity .12s ease !important;
+  pointer-events: none !important;
+}
+
+/* Float label on focus */
+div[data-ux="InputFloatLabel"]:focus-within > label{
+  transform: scale(.85) translateY(-16px) !important;
+}
+
+/* Float label when input has content (requires placeholder=" ") */
+div[data-ux="InputFloatLabel"] > input:not(:placeholder-shown) + label{
+  transform: scale(.85) translateY(-16px) !important;
 }
 </style>
 
