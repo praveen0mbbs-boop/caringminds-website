@@ -678,6 +678,36 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
   }, false);
 })();
 </script>
+<script id="cm-floatlabel-value-sync">
+  // Some GoDaddy/UX float-label styles rely on the *attribute* value, not just the JS property.
+  // Keep them in sync so labels stay floated after blur.
+  (function(){
+    function sync(el){
+      try { el.setAttribute('value', el.value || ''); } catch(_) {}
+    }
+    document.addEventListener('input', function(e){
+      var el = e.target;
+      if (!el) return;
+      if (el.matches && el.matches('#careerForm input[data-ux="InputFloatLabel"]')) sync(el);
+    }, true);
+    document.addEventListener('change', function(e){
+      var el = e.target;
+      if (!el) return;
+      if (el.matches && el.matches('#careerForm input[data-ux="InputFloatLabel"]')) sync(el);
+    }, true);
+    document.addEventListener('blur', function(e){
+      var el = e.target;
+      if (!el) return;
+      if (el.matches && el.matches('#careerForm input[data-ux="InputFloatLabel"]')) sync(el);
+    }, true);
+
+    // run once on load (covers autofill)
+    window.addEventListener('load', function(){
+      var inputs = document.querySelectorAll('#careerForm input[data-ux="InputFloatLabel"]');
+      inputs.forEach(sync);
+    });
+  })();
+</script>
 </body>
 <!-- Mirrored from caringmindsbehavioralhealth.com/career by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Jan 2026 03:04:33 GMT -->
 </html>
