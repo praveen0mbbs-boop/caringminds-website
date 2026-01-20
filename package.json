@@ -1,0 +1,12 @@
+{
+  "name": "cmbh-pages",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Caring Minds Cloudflare Pages site with Turnstile + email form",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "scripts": {
+    "dev": "wrangler pages dev public --compatibility-date=2025-01-01"
+  }
+}
