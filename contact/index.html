@@ -571,7 +571,7 @@ body{position:relative!important;}
 /* force header/nav visible even if builder expected JS */
 [data-ux="Header"], [data-ux^="Nav"], nav{visibility:visible!important; opacity:1!important;}
 </style>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=cmTurnstileOnload" async defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 <style id="cm-floatlabel-fix">
 /* Works on static pages: keeps label up when focused OR when input has value */
 div[data-ux="InputFloatLabel"]{
@@ -623,8 +623,8 @@ div[data-ux="InputFloatLabel"] > input:not(:placeholder-shown) + label{
 
 
 
-<script>"use strict";Core.utils.onAllowCookieTracking(function () {const queryString = window.location.search;const urlParams = new URLSearchParams(queryString);const whiteList = ['gclid', 'fbclid', 'gdan_clid'];const belongToList = list => item => list.includes(item);const belongToWhiteList = belongToList(whiteList);Array.from(urlParams).forEach(param => {const [queryKey, queryResult] = param;if (!belongToWhiteList(queryKey)) return;localStorage.setItem(queryKey, queryResult);});});
-"use strict";Core.utils.onAllowCookieTracking(() => {if (!document.cookie.includes("x-visitor-id")) {!function (o, i, e = 60) {const t = new Date();t.setTime(t.getTime() + 864e5 * e);const n = `expires=${t.toUTCString()}`;document.cookie = `${o}=${i};${n};path=/`;}("x-visitor-id", crypto.randomUUID(), 60);}});</script>
+<script>"use strict";try{if(window.Core&&Core.utils&&Core.utils.onAllowCookieTracking){Core.utils.onAllowCookieTracking(function () {const queryString = window.location.search;const urlParams = new URLSearchParams(queryString);const whiteList = ['gclid', 'fbclid', 'gdan_clid'];const belongToList = list => item => list.includes(item);const belongToWhiteList = belongToList(whiteList);Array.from(urlParams).forEach(param => {const [queryKey, queryResult] = param;if (!belongToWhiteList(queryKey)) return;localStorage.setItem(queryKey, queryResult);});});
+"use strict";window.Core&&Core.utils&&Core.utils.onAllowCookieTracking&&Core.utils.onAllowCookieTracking(() => {if (!document.cookie.includes("x-visitor-id")) {!function (o, i, e = 60) {const t = new Date();t.setTime(t.getTime() + 864e5 * e);const n = `expires=${t.toUTCString()}`;document.cookie = `${o}=${i};${n};path=/`;}("x-visitor-id", crypto.randomUUID(), 60);}});}}catch(e){}</script>
 <script id="cf-scroll-fix">
 try{document.documentElement.style.overflowY='auto';document.body.style.overflowY='auto';}
 catch(e){}
@@ -633,15 +633,6 @@ catch(e){}
 // safety: if a script previously set overflow hidden, undo it
 try{document.documentElement.style.overflow='auto';document.body.style.overflow='auto';}catch(e){}
 </script>
-<script>
-  function cmTurnstileCallback(token) {
-    document.getElementById("cf-turnstile-response").value = token;
-  }
-  function cmTurnstileExpired() {
-    document.getElementById("cf-turnstile-response").value = "";
-  }
-</script>
-
 <script id="cm-turnstile-runtime">
   // Store token in hidden field
   function cmTurnstileCallback(token) {
@@ -651,25 +642,6 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
   function cmTurnstileExpired() {
     var el = document.getElementById("cf-turnstile-response");
     if (el) el.value = "";
-  }
-
-  // Explicit render (fixes cases where auto-render fails / widget is invisible)
-  function cmTurnstileOnload() {
-    try {
-      var container = document.querySelector(".cf-turnstile");
-      if (!container || !window.turnstile) return;
-
-      // If Cloudflare already auto-rendered, avoid double render
-      if (container.querySelector("iframe")) return;
-
-      window.turnstile.render(container, {
-        sitekey: container.getAttribute("data-sitekey"),
-        callback: cmTurnstileCallback,
-        "expired-callback": cmTurnstileExpired
-      });
-    } catch (e) {
-      // swallow
-    }
   }
 
   // Prevent submit unless token exists
