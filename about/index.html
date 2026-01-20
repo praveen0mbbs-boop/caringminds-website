@@ -571,6 +571,31 @@ body{position:relative!important;}
 /* force header/nav visible even if builder expected JS */
 [data-ux="Header"], [data-ux^="Nav"], nav{visibility:visible!important; opacity:1!important;}
 </style>
+
+<style id="cm-nav-colors">
+  [data-ux="Header"],
+  [data-ux="Header"] nav {
+    background-color: #1f2f2b !important;
+  }
+  [data-aid="HAMBURGER_MENU_LINK"],
+  [data-ux="IconHamburger"] {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+  }
+  [data-ux="Nav"] a {
+    color: #ffffff !important;
+  }
+  [data-ux="NavigationDrawer"] {
+    background-color: #1f2f2b !important;
+  }
+  [data-ux="NavigationDrawer"] a {
+    color: #ffffff !important;
+  }
+  [data-ux="CloseIcon"] {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+  }
+</style>
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><script>
   // Prevent GoDaddy "Core" crash on static hosting (Cloudflare/GitHub)
