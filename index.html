@@ -640,46 +640,6 @@ body{position:relative!important;}
   z-index: 1 !important;
 }
 </style>
-
-<style id="cm-hero-tune">
-/* Caring Minds: make hero background vivid + blurry while keeping layout unchanged */
-[data-ux="HeaderMediaBackground"]{
-  position: relative;
-  overflow: hidden;
-}
-[data-ux="HeaderMediaBackground"] picture,
-[data-ux="HeaderMediaBackground"] img[data-ux="HeaderMediaImage"],
-[data-ux="HeaderMediaBackground"] img[data-aid="BACKGROUND_IMAGE_RENDERED"]{
-  width: 100% !important;
-  height: 100% !important;
-}
-[data-ux="HeaderMediaBackground"] img[data-ux="HeaderMediaImage"],
-[data-ux="HeaderMediaBackground"] img[data-aid="BACKGROUND_IMAGE_RENDERED"]{
-  object-fit: cover !important;
-  object-position: center center !important;
-  /* vivid + blur */
-  filter: blur(14px) saturate(1.55) contrast(1.18) brightness(1.12) !important;
-  transform: scale(1.08) !important; /* avoid blurred edges */
-  opacity: 0.45 !important;          /* image present but not overpowering */
-}
-/* Add a soft gradient wash on top (keeps text readable) */
-[data-ux="HeaderMediaBackground"]::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(1200px 600px at 15% 25%, rgba(255,255,255,0.28), rgba(255,255,255,0.00) 60%),
-    linear-gradient(135deg, rgba(20,65,85,0.55), rgba(10,25,35,0.65));
-  mix-blend-mode: normal;
-}
-/* Ensure hero content stays above overlays */
-[data-ux="HeaderMediaBackground"] > *{
-  position: relative;
-  z-index: 1;
-}
-</style>
-
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
 
