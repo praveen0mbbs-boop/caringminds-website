@@ -611,15 +611,33 @@ body{position:relative!important;}
 
 [data-ux="NavigationDrawer"] { visibility: visible !important; opacity: 1 !important; }
 </style>
-<style id="cm-hero-bg-fix">
-/* CM-FIX: Force the hero background + gradient like the original 905 section */
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
+<style id="cm-hero-bg-fix-v3">
+/* CM-FIX-V3: Apply gradient + hero background to the ACTUAL hero background wrapper */
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"],
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] > div,
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] nav {
   background-image:
     linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%),
     url("assets/hero.jpg") !important;
-  background-position: center !important;
+  background-position: center center !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
+}
+
+/* Ensure the wrapper can actually show the background */
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
+  width: 100%;
+}
+
+/* Keep layout stable but don't rely on the <img> as the background */
+img[data-ux="HeaderMediaImage"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
+  opacity: 0 !important;
+}
+
+/* Safety: if the hero image is absolutely positioned, keep it from blocking clicks */
+picture[data-lazyimg="true"], 
+picture[data-lazyimg="true"] img{
+  pointer-events: none;
 }
 </style>
 </head>
