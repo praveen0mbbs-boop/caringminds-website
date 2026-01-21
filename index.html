@@ -641,42 +641,43 @@ body{position:relative!important;}
 }
 </style>
 
-<!-- CM-FIX: HERO BACKGROUND GRADIENT (keep layout; reduce image visibility) -->
-<style id="cm-hero-gradient-override">
-  /* Target the GoDaddy hero background wrapper */
-  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
-    position: relative !important;
-    overflow: hidden !important;
-    background: none !important;
-  }
-
-  /* Gradient layer ABOVE the image but BELOW all content */
-  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    /* soft teal/blue -> white, similar feel to original */
-    background:
-      radial-gradient(1200px 700px at 20% 35%, rgba(0, 166, 156, 0.35) 0%, rgba(0, 166, 156, 0.12) 45%, rgba(255,255,255,0.00) 70%),
-      radial-gradient(900px 600px at 78% 55%, rgba(46, 148, 255, 0.22) 0%, rgba(46, 148, 255, 0.10) 45%, rgba(255,255,255,0.00) 72%),
-      linear-gradient(135deg, rgba(0, 166, 156, 0.14) 0%, rgba(46, 148, 255, 0.10) 35%, rgba(255,255,255,0.92) 85%, rgba(255,255,255,0.96) 100%);
-    pointer-events: none;
-  }
-
-  /* Make sure hero content is on top of gradient */
-  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] > *{
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Keep the image technically present for layout, but make it barely visible */
-  img[data-ux="HeaderMediaImage"][data-aid="BACKGROUND_IMAGE_RENDERED"],
-  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] img{
-    opacity: 0.05 !important;   /* near-invisible */
-    filter: blur(10px) saturate(70%) contrast(115%) brightness(112%) !important;
-    transform: scale(1.06) !important;
-  }
+<style id="cm-hero-tune">
+/* Caring Minds: make hero background vivid + blurry while keeping layout unchanged */
+[data-ux="HeaderMediaBackground"]{
+  position: relative;
+  overflow: hidden;
+}
+[data-ux="HeaderMediaBackground"] picture,
+[data-ux="HeaderMediaBackground"] img[data-ux="HeaderMediaImage"],
+[data-ux="HeaderMediaBackground"] img[data-aid="BACKGROUND_IMAGE_RENDERED"]{
+  width: 100% !important;
+  height: 100% !important;
+}
+[data-ux="HeaderMediaBackground"] img[data-ux="HeaderMediaImage"],
+[data-ux="HeaderMediaBackground"] img[data-aid="BACKGROUND_IMAGE_RENDERED"]{
+  object-fit: cover !important;
+  object-position: center center !important;
+  /* vivid + blur */
+  filter: blur(14px) saturate(1.55) contrast(1.18) brightness(1.12) !important;
+  transform: scale(1.08) !important; /* avoid blurred edges */
+  opacity: 0.45 !important;          /* image present but not overpowering */
+}
+/* Add a soft gradient wash on top (keeps text readable) */
+[data-ux="HeaderMediaBackground"]::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 600px at 15% 25%, rgba(255,255,255,0.28), rgba(255,255,255,0.00) 60%),
+    linear-gradient(135deg, rgba(20,65,85,0.55), rgba(10,25,35,0.65));
+  mix-blend-mode: normal;
+}
+/* Ensure hero content stays above overlays */
+[data-ux="HeaderMediaBackground"] > *{
+  position: relative;
+  z-index: 1;
+}
 </style>
 
 </head>
