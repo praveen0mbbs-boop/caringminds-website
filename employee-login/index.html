@@ -571,6 +571,21 @@ body{position:relative!important;}
 /* force header/nav visible even if builder expected JS */
 [data-ux="Header"], [data-ux^="Nav"], nav{visibility:visible!important; opacity:1!important;}
 </style>
+
+<style id="cm-navdrawer-fix">
+  /* Static drawer open/close (no GoDaddy runtime JS needed) */
+  [data-ux="NavigationDrawer"]{
+    display: block !important;
+    transform: translateX(-110%);
+    transition: transform .22s ease;
+    pointer-events: none;
+  }
+  [data-ux="NavigationDrawer"].cm-open{
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+</style>
+
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
 
@@ -598,176 +613,112 @@ body{position:relative!important;}
 
 <script>"use strict";Core.utils.onAllowCookieTracking(function () {const queryString = window.location.search;const urlParams = new URLSearchParams(queryString);const whiteList = ['gclid', 'fbclid', 'gdan_clid'];const belongToList = list => item => list.includes(item);const belongToWhiteList = belongToList(whiteList);Array.from(urlParams).forEach(param => {const [queryKey, queryResult] = param;if (!belongToWhiteList(queryKey)) return;localStorage.setItem(queryKey, queryResult);});});
 "use strict";Core.utils.onAllowCookieTracking(() => {if (!document.cookie.includes("x-visitor-id")) {!function (o, i, e = 60) {const t = new Date();t.setTime(t.getTime() + 864e5 * e);const n = `expires=${t.toUTCString()}`;document.cookie = `${o}=${i};${n};path=/`;}("x-visitor-id", crypto.randomUUID(), 60);}});</script>
-<script id="cf-scroll-fix">
-try{document.documentElement.style.overflowY='auto';document.body.style.overflowY='auto';}
-catch(e){}
-</script>
-<script id="cf-static-js">
-// safety: if a script previously set overflow hidden, undo it
-try{document.documentElement.style.overflow='auto';document.body.style.overflow='auto';}catch(e){}
-</script>
 
-<!-- CM NAVDRAWER FIX START -->
 
-<style id="cm-navdrawer-fix">
-/* Hide broken/duplicated GoDaddy mobile drawer (we provide our own) */
-div[data-ux="NavigationDrawer"]{ display:none !important; }
 
-/* Make sure hamburger stays clickable */
-[data-aid="HAMBURGER_MENU_LINK"]{
-  position: relative;
-  z-index: 100000 !important;
-}
 
-/* Optional: subtle contrast without changing the icon itself */
-@media (max-width: 767px){
-  [data-aid="HAMBURGER_MENU_LINK"]{
-    background: rgba(0,0,0,.75) !important;
-    border-radius: 10px !important;
-    padding: 8px !important;
+
+
+<style id="cm-nav-fix">
+
+  /* Static export fix: make the GoDaddy/UX2 mobile navigation drawer work without their runtime JS */
+  [data-ux="NavigationDrawer"]{
+    z-index: 10002 !important;
+    background-color: rgb(22,22,22) !important; /* dark background */
   }
-  [data-aid="HAMBURGER_MENU_LINK"] svg{
-    display:block !important;
+  /* Drawer is "off-canvas" by default via transform from the generated classes; cm-open brings it on screen */
+  [data-ux="NavigationDrawer"].cm-open{
+    transform: translateX(0) !important;
   }
-}
+  /* Ensure the drawer is not visually hidden by other generated visibility rules */
+  [data-ux="NavigationDrawer"].cm-open{
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  /* Make drawer links readable */
+  [data-ux="NavigationDrawer"] a{
+    color: rgb(255,255,255) !important;
+    text-decoration: none;
+  }
+  [data-ux="NavigationDrawer"] a:hover{
+    text-decoration: underline;
+  }
+  /* Make close icon visible on dark background */
+  [data-ux="NavigationDrawer"] [data-close="true"]{
+    cursor: pointer;
+  }
 
-/* Our drawer */
-#cm-navdrawer{
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: min(86vw, 360px);
-  transform: translateX(-105%);
-  transition: transform .25s ease;
-  background: #111;
-  color: #fff;
-  z-index: 100001;
-  padding: 18px 16px 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
-  overflow-y: auto;
-}
-#cm-navdrawer.cm-open{ transform: translateX(0); }
-
-#cm-navdrawer .cm-close{
-  appearance: none;
-  border: 0;
-  background: transparent;
-  color: #fff;
-  font-size: 34px;
-  line-height: 1;
-  padding: 4px 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-#cm-navdrawer .cm-title{
-  font-size: 14px;
-  letter-spacing: .08em;
-  opacity: .8;
-  margin: 6px 0 14px;
-  text-transform: uppercase;
-}
-#cm-navdrawer nav a{
-  display: block;
-  padding: 12px 10px;
-  border-radius: 10px;
-  color: #fff;
-  text-decoration: none;
-  font-size: 16px;
-}
-#cm-navdrawer nav a:hover{ background: rgba(255,255,255,.10); }
-
-#cm-navdrawer-backdrop{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease;
-  z-index: 100000;
-}
-#cm-navdrawer-backdrop.cm-open{
-  opacity: 1;
-  pointer-events: auto;
-}
 </style>
-
-
-<div id="cm-navdrawer-backdrop" aria-hidden="true"></div>
-<aside id="cm-navdrawer" aria-hidden="true">
-  <button type="button" class="cm-close" aria-label="Close menu">×</button>
-  <div class="cm-title">Menu</div>
-  <nav aria-label="Site">
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/who-we-serve/">Who We Serve</a>
-    <a href="/services/care/">Services/Care</a>
-    <a href="/contact/">Contact</a>
-    <a href="/employee-login/">Employee Login</a>
-    <a href="/career/">Career</a>
-  </nav>
-</aside>
-
-
-<script id="cm-navdrawer-js">
-(function(){
+<script id="cm-nav-toggle">
+(function () {
   function qs(sel, root){ return (root||document).querySelector(sel); }
   function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
 
   var hamburger = qs('[data-aid="HAMBURGER_MENU_LINK"]');
-  var drawer = qs('#cm-navdrawer');
-  var backdrop = qs('#cm-navdrawer-backdrop');
+  if (!hamburger) return;
 
-  if(!hamburger || !drawer || !backdrop) return;
+  // toggleId is a UX2 attribute used by the exported markup
+  var drawerId = hamburger.getAttribute('toggleId') || hamburger.getAttribute('toggleid') || '';
+  var drawer = drawerId ? document.getElementById(drawerId) : null;
+  if (!drawer) drawer = qs('[data-ux="NavigationDrawer"]');
+  if (!drawer) return;
+
+  // Keep a stable initial state
+  drawer.classList.remove('cm-open');
+  hamburger.setAttribute('aria-expanded', 'false');
 
   function setOpen(open){
     drawer.classList.toggle('cm-open', !!open);
-    backdrop.classList.toggle('cm-open', !!open);
-    drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
-    backdrop.setAttribute('aria-hidden', open ? 'false' : 'true');
     hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    try{
-      document.documentElement.style.overflow = open ? 'hidden' : 'auto';
-      document.body.style.overflow = open ? 'hidden' : 'auto';
-    }catch(e){}
+
+    // Prevent background scroll while open (mobile UX)
+    try {
+      if (open){
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      }
+    } catch(e){}
   }
 
-  // ensure initial
-  setOpen(false);
+  function isOpen(){ return drawer.classList.contains('cm-open'); }
 
-  hamburger.addEventListener('click', function(e){
+  hamburger.addEventListener('click', function (e) {
     e.preventDefault();
-    setOpen(!drawer.classList.contains('cm-open'));
+    setOpen(!isOpen());
   });
 
-  // close on close button
-  var closeBtn = qs('.cm-close', drawer);
-  if(closeBtn){
-    closeBtn.addEventListener('click', function(e){
-      e.preventDefault();
+  // Close when clicking any element marked data-close="true" inside the drawer (X icon and drawer links)
+  drawer.addEventListener('click', function(e){
+    var target = e.target;
+    if (!target) return;
+
+    var closeEl = target.closest ? target.closest('[data-close="true"]') : null;
+    if (closeEl){
+      // If it's a real navigation link, allow the browser to navigate (do NOT preventDefault)
+      var isNavLink = closeEl.tagName === 'A' && closeEl.getAttribute('href') && closeEl.getAttribute('href') !== '#';
       setOpen(false);
-    });
-  }
+      if (!isNavLink) e.preventDefault();
+      return;
+    }
+  }, true);
 
-  // close on backdrop click
-  backdrop.addEventListener('click', function(){ setOpen(false); });
-
-  // close on link click
+  // Better UX: close after clicking any link in the drawer but still navigate normally
   qsa('a[href]', drawer).forEach(function(a){
-    a.addEventListener('click', function(){ setOpen(false); });
+    a.addEventListener('click', function(){
+      setOpen(false);
+    }, true);
   });
 
-  // close on escape
+  // Close on Escape
   document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape') setOpen(false);
+    if (e.key === 'Escape') setOpen(false);
   });
+
 })();
 </script>
-
-<!-- CM NAVDRAWER FIX END -->
-
 </body>
 <!-- Mirrored from caringmindsbehavioralhealth.com/employee-login by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Jan 2026 03:04:31 GMT -->
 </html>
