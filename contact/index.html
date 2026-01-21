@@ -608,6 +608,37 @@ div[data-ux="InputFloatLabel"] > input:not(:placeholder-shown) + label{
   .cf-turnstile { display:block !important; min-height:70px !important; margin:12px 0 !important; }
 </style>
 
+
+<style id="cm-nav-fix">
+
+  /* Static export fix: make the GoDaddy/UX2 mobile navigation drawer work without their runtime JS */
+  [data-ux="NavigationDrawer"]{
+    z-index: 10002 !important;
+    background-color: rgb(22,22,22) !important; /* dark background */
+  }
+  /* Drawer is "off-canvas" by default via transform from the generated classes; cm-open brings it on screen */
+  [data-ux="NavigationDrawer"].cm-open{
+    transform: translateX(0) !important;
+  }
+  /* Ensure the drawer is not visually hidden by other generated visibility rules */
+  [data-ux="NavigationDrawer"].cm-open{
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  /* Make drawer links readable */
+  [data-ux="NavigationDrawer"] a{
+    color: rgb(255,255,255) !important;
+    text-decoration: none;
+  }
+  [data-ux="NavigationDrawer"] a:hover{
+    text-decoration: underline;
+  }
+  /* Make close icon visible on dark background */
+  [data-ux="NavigationDrawer"] [data-close="true"]{
+    cursor: pointer;
+  }
+
+</style>
 </head> 
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><script>
   // Prevent GoDaddy "Core" crash on static hosting (Cloudflare/GitHub)
@@ -733,6 +764,77 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
 })();
 </script>
 
+
+<script id="cm-nav-toggle">
+(function () {
+  function qs(sel, root){ return (root||document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+
+  var hamburger = qs('[data-aid="HAMBURGER_MENU_LINK"]');
+  if (!hamburger) return;
+
+  // toggleId is a UX2 attribute used by the exported markup
+  var drawerId = hamburger.getAttribute('toggleId') || hamburger.getAttribute('toggleid') || '';
+  var drawer = drawerId ? document.getElementById(drawerId) : null;
+  if (!drawer) drawer = qs('[data-ux="NavigationDrawer"]');
+  if (!drawer) return;
+
+  // Keep a stable initial state
+  drawer.classList.remove('cm-open');
+  hamburger.setAttribute('aria-expanded', 'false');
+
+  function setOpen(open){
+    drawer.classList.toggle('cm-open', !!open);
+    hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+    // Prevent background scroll while open (mobile UX)
+    try {
+      if (open){
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      }
+    } catch(e){}
+  }
+
+  function isOpen(){ return drawer.classList.contains('cm-open'); }
+
+  hamburger.addEventListener('click', function (e) {
+    e.preventDefault();
+    setOpen(!isOpen());
+  });
+
+  // Close when clicking any element marked data-close="true" inside the drawer (X icon and drawer links)
+  drawer.addEventListener('click', function(e){
+    var target = e.target;
+    if (!target) return;
+
+    var closeEl = target.closest ? target.closest('[data-close="true"]') : null;
+    if (closeEl){
+      // If it's a real navigation link, allow the browser to navigate (do NOT preventDefault)
+      var isNavLink = closeEl.tagName === 'A' && closeEl.getAttribute('href') && closeEl.getAttribute('href') !== '#';
+      setOpen(false);
+      if (!isNavLink) e.preventDefault();
+      return;
+    }
+  }, true);
+
+  // Better UX: close after clicking any link in the drawer but still navigate normally
+  qsa('a[href]', drawer).forEach(function(a){
+    a.addEventListener('click', function(){
+      setOpen(false);
+    }, true);
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+})();
+</script>
 </body>
 <!-- Mirrored from caringmindsbehavioralhealth.com/contact by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Jan 2026 03:04:29 GMT -->
 </html>
