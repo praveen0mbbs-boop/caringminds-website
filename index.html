@@ -642,19 +642,19 @@ body{position:relative!important;}
 </style>
 
 <style>
-/* HERO IMAGE – LEVEL 2 (PIXELATED + BRIGHT) */
+/* GoDaddy-style hero background (blurred image + color wash) */
 img[data-ux="HeaderMediaImage"][data-aid="BACKGROUND_IMAGE_RENDERED"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  image-rendering: pixelated;
-  transform: scale(1.12);
-  filter: brightness(1.22) saturate(1.28) contrast(0.96);
-  opacity: 0.88;
+  transform: scale(1.15);
+  filter: blur(32px) brightness(1.15) saturate(1.15);
+  opacity: 0.85;
 }
 
 [data-ux="HeaderMediaBackground"] {
   position: relative;
+  overflow: hidden;
 }
 
 [data-ux="HeaderMediaBackground"]::after {
@@ -662,10 +662,10 @@ img[data-ux="HeaderMediaImage"][data-aid="BACKGROUND_IMAGE_RENDERED"] {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    115deg,
-    rgba(40, 95, 125, 0.30),
-    rgba(95, 145, 165, 0.22),
-    rgba(175, 210, 220, 0.18)
+    120deg,
+    rgba(38, 92, 122, 0.45),
+    rgba(92, 150, 170, 0.35),
+    rgba(220, 235, 240, 0.25)
   );
   pointer-events: none;
 }
