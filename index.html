@@ -674,6 +674,27 @@ img[data-ux="HeaderMediaImage"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
 }
 </style>
 
+<style id="cm-hero-gradient-905">
+.cm-hero-gradient{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    radial-gradient(1200px 700px at 20% 25%, rgba(88, 173, 180, 0.55), rgba(88, 173, 180, 0) 60%),
+    radial-gradient(1000px 700px at 85% 35%, rgba(242, 150, 140, 0.45), rgba(242, 150, 140, 0) 60%),
+    radial-gradient(900px 700px at 50% 85%, rgba(170, 214, 200, 0.40), rgba(170, 214, 200, 0) 60%),
+    linear-gradient(135deg, rgba(18, 32, 54, 0.95), rgba(18, 32, 54, 0.75));
+}
+
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
+  position:relative;
+  overflow:hidden;
+}
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] > *{
+  position:relative;
+  z-index:1;
+}
+</style>
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
 
