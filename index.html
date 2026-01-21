@@ -640,6 +640,46 @@ body{position:relative!important;}
   z-index: 1 !important;
 }
 </style>
+
+<style id="v4-vivid-overrides">
+/* V4: keep layout identical, only adjust HERO BACKGROUND colors and remove blur. */
+
+/* Neutralize any blur applied to hero background pseudo-element */
+[data-ux="HeaderMediaBackground"]::before{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* Then boost vividness on the exact hero background pseudo-element used by v4 */
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
+  filter: saturate(1.35) contrast(1.12) brightness(1.06) !important;
+  -webkit-filter: saturate(1.35) contrast(1.12) brightness(1.06) !important;
+}
+
+/* Add a subtle color overlay (does NOT blur) */
+[data-ux="HeaderMediaBackground"]{
+  position: relative;
+}
+[data-ux="HeaderMediaBackground"]::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 18% 30%, rgba(0, 173, 165, 0.24), rgba(0, 0, 0, 0) 60%),
+    radial-gradient(900px 520px at 78% 36%, rgba(255, 196, 120, 0.18), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(120deg, rgba(0, 120, 130, 0.14), rgba(0, 0, 0, 0) 45%, rgba(255, 155, 120, 0.12));
+  mix-blend-mode: multiply;
+  opacity: 1;
+  z-index: 0;
+}
+/* Keep hero content above overlay */
+[data-ux="HeaderMediaBackground"] > *{
+  position: relative;
+  z-index: 1;
+}
+</style>
+
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
 
