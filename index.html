@@ -641,43 +641,42 @@ body{position:relative!important;}
 }
 </style>
 
-<style id="v4-vivid-overrides">
-/* V4: keep layout identical, only adjust HERO BACKGROUND colors and remove blur. */
+<!-- CM-FIX: HERO BACKGROUND GRADIENT (keep layout; reduce image visibility) -->
+<style id="cm-hero-gradient-override">
+  /* Target the GoDaddy hero background wrapper */
+  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
+    position: relative !important;
+    overflow: hidden !important;
+    background: none !important;
+  }
 
-/* Neutralize any blur applied to hero background pseudo-element */
-[data-ux="HeaderMediaBackground"]::before{
-  filter: none !important;
-  -webkit-filter: none !important;
-}
+  /* Gradient layer ABOVE the image but BELOW all content */
+  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    /* soft teal/blue -> white, similar feel to original */
+    background:
+      radial-gradient(1200px 700px at 20% 35%, rgba(0, 166, 156, 0.35) 0%, rgba(0, 166, 156, 0.12) 45%, rgba(255,255,255,0.00) 70%),
+      radial-gradient(900px 600px at 78% 55%, rgba(46, 148, 255, 0.22) 0%, rgba(46, 148, 255, 0.10) 45%, rgba(255,255,255,0.00) 72%),
+      linear-gradient(135deg, rgba(0, 166, 156, 0.14) 0%, rgba(46, 148, 255, 0.10) 35%, rgba(255,255,255,0.92) 85%, rgba(255,255,255,0.96) 100%);
+    pointer-events: none;
+  }
 
-/* Then boost vividness on the exact hero background pseudo-element used by v4 */
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
-  filter: saturate(1.35) contrast(1.12) brightness(1.06) !important;
-  -webkit-filter: saturate(1.35) contrast(1.12) brightness(1.06) !important;
-}
+  /* Make sure hero content is on top of gradient */
+  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] > *{
+    position: relative;
+    z-index: 1;
+  }
 
-/* Add a subtle color overlay (does NOT blur) */
-[data-ux="HeaderMediaBackground"]{
-  position: relative;
-}
-[data-ux="HeaderMediaBackground"]::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(900px 520px at 18% 30%, rgba(0, 173, 165, 0.24), rgba(0, 0, 0, 0) 60%),
-    radial-gradient(900px 520px at 78% 36%, rgba(255, 196, 120, 0.18), rgba(0, 0, 0, 0) 62%),
-    linear-gradient(120deg, rgba(0, 120, 130, 0.14), rgba(0, 0, 0, 0) 45%, rgba(255, 155, 120, 0.12));
-  mix-blend-mode: multiply;
-  opacity: 1;
-  z-index: 0;
-}
-/* Keep hero content above overlay */
-[data-ux="HeaderMediaBackground"] > *{
-  position: relative;
-  z-index: 1;
-}
+  /* Keep the image technically present for layout, but make it barely visible */
+  img[data-ux="HeaderMediaImage"][data-aid="BACKGROUND_IMAGE_RENDERED"],
+  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] img{
+    opacity: 0.05 !important;   /* near-invisible */
+    filter: blur(10px) saturate(70%) contrast(115%) brightness(112%) !important;
+    transform: scale(1.06) !important;
+  }
 </style>
 
 </head>
