@@ -713,6 +713,22 @@ body{position:relative!important;}
 })();
 </script>
 
+
+<style id="cm-simple-hero-image">
+/* Simple hero image only – no blur, no overlay, no interaction issues */
+[data-ux="HeaderMedia"]{
+  background-image: url("//img1.wsimg.com/isteam/stock/905/:/") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Ensure hero background never blocks navigation taps */
+[data-ux="HeaderMedia"]::before{
+  content:none !important;
+}
+</style>
+
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
 
