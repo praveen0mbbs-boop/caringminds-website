@@ -645,157 +645,122 @@ catch(e){}
 try{document.documentElement.style.overflow='auto';document.body.style.overflow='auto';}catch(e){}
 </script>
 <style id="cm-navdrawer-fix">
-  /* Force the mobile nav drawer to actually open/close (HTTrack exports often miss the JS) */
-  #n-203400-navId-mobile{ display:none !important; }
-  #n-203400-navId-mobile.cm-open{ display:block !important; }
-  /* Make sure drawer overlays the page */
-  #n-203400-navId-mobile{ position:fixed !important; top:0 !important; right:0 !important; bottom:0 !important; left:0 !important; z-index:9998 !important; }
+/* Force the GoDaddy mobile drawer to be usable on static hosting */
+[data-ux="NavigationDrawer"]{
+  display: none;               /* toggled by JS */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: min(86vw, 420px) !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  z-index: 9998 !important;
+  background: #0b0b0b !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,.55) !important; /* fake backdrop */
+  transform: translateX(-110%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform .18s ease, opacity .18s ease, visibility .18s ease;
+}
+[data-ux="NavigationDrawer"].cm-open{
+  display: block !important;
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+[data-ux="NavigationDrawer"] a{
+  color: #fff !important;
+}
 </style>
 <script id="cm-nav-toggle">
 (function () {
+  function ready(fn){
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn);
+    else fn();
+  }
   function qs(sel, root){ return (root||document).querySelector(sel); }
   function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
 
-  var hamburger = qs('[data-aid="HAMBURGER_MENU_LINK"]');
-  if (!hamburger) return;
+  ready(function(){
+    var hamburger = qs('[data-aid="HAMBURGER_MENU_LINK"]');
+    if (!hamburger) return;
 
-  var drawerId = hamburger.getAttribute('toggleId') || 'n-203400-navId-mobile';
-  var drawer = document.getElementById(drawerId);
-  if (!drawer) return;
+    var drawerId = hamburger.getAttribute('toggleId') || hamburger.getAttribute('data-toggle-id') || 'n-203400-navId-mobile';
+    var drawer = document.getElementById(drawerId);
+    if (!drawer) return;
 
-  // Ensure drawer starts closed
-  drawer.classList.remove('cm-open');
-  hamburger.setAttribute('aria-expanded','false');
+    // Some GoDaddy templates hide drawers with inline styles; normalize
+    drawer.style.display = 'none';
+    drawer.style.visibility = 'hidden';
+    drawer.style.opacity = '0';
+    drawer.style.transform = 'translateX(-110%)';
 
-  function setOpen(open){
-    if (open){
-      drawer.classList.add('cm-open');
-      hamburger.setAttribute('aria-expanded','true');
-      try { document.documentElement.style.overflow='hidden'; document.body.style.overflow='hidden'; } catch(e){}
-    } else {
-      drawer.classList.remove('cm-open');
-      hamburger.setAttribute('aria-expanded','false');
-      try { document.documentElement.style.overflow=''; document.body.style.overflow=''; } catch(e){}
+    hamburger.setAttribute('aria-expanded', 'false');
+
+    function setOpen(open){
+      if (open){
+        drawer.classList.add('cm-open');
+        drawer.style.display = 'block';
+        drawer.style.visibility = 'visible';
+        drawer.style.opacity = '1';
+        drawer.style.transform = 'translateX(0)';
+        hamburger.setAttribute('aria-expanded', 'true');
+        try { document.documentElement.style.overflow = 'hidden'; document.body.style.overflow = 'hidden'; } catch(e){}
+      } else {
+        drawer.classList.remove('cm-open');
+        drawer.style.opacity = '0';
+        drawer.style.transform = 'translateX(-110%)';
+        hamburger.setAttribute('aria-expanded', 'false');
+        // wait for transition then hide
+        window.setTimeout(function(){
+          if (!drawer.classList.contains('cm-open')){
+            drawer.style.display = 'none';
+            drawer.style.visibility = 'hidden';
+          }
+        }, 180);
+        try { document.documentElement.style.overflow = 'auto'; document.body.style.overflow = 'auto'; } catch(e){}
+      }
     }
-  }
-  function isOpen(){ return drawer.classList.contains('cm-open'); }
 
-  hamburger.addEventListener('click', function(e){
-    e.preventDefault();
-    setOpen(!isOpen());
-  });
+    function isOpen(){ return hamburger.getAttribute('aria-expanded') === 'true' || drawer.classList.contains('cm-open'); }
 
-  // Close icon / any element explicitly marked data-close="true"
-  qsa('[data-close="true"]', drawer).forEach(function(el){
-    el.addEventListener('click', function(e){
-      // Only block default if it's a pure "#" control; allow real links to navigate
-      var tag = (el.tagName||'').toUpperCase();
-      var href = (tag === 'A') ? (el.getAttribute('href')||'') : '';
-      if (href === '' || href === '#') e.preventDefault();
-      setOpen(false);
-    });
-  });
-
-  // Close when clicking any real nav link (but don't prevent navigation)
-  qsa('a[href]', drawer).forEach(function(a){
-    var href = (a.getAttribute('href')||'').trim();
-    if (!href || href === '#') return;
-    a.addEventListener('click', function(){
-      setOpen(false);
-    });
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') setOpen(false);
-  });
-})();
-</script>
-
-<style id="cm-drawer-fix">
-  /* Mobile nav drawer: force visibility toggling when builder JS is missing */
-  [data-ux="NavigationDrawer"]{ 
-    display:none;
-  }
-  [data-ux="NavigationDrawer"].cm-open{
-    display:block !important;
-    position:fixed !important;
-    inset:0 !important;
-    z-index: 9998 !important;
-    opacity:1 !important;
-    visibility:visible !important;
-    pointer-events:auto !important;
-  }
-  /* ensure close icon stays clickable */
-  [data-ux="NavigationDrawer"].cm-open [data-close="true"]{
-    cursor:pointer;
-  }
-</style>
-
-<script id="cm-nav-toggle-v2">
-(function () {
-  function qs(sel, root){ return (root||document).querySelector(sel); }
-  function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
-
-  var hamburger = qs('[data-aid="HAMBURGER_MENU_LINK"]');
-  if (!hamburger) return;
-
-  var drawerId = hamburger.getAttribute('toggleId') || hamburger.getAttribute('data-toggleid') || '';
-  if (!drawerId){
-    // fallback: first NavigationDrawer on page
-    var firstDrawer = qs('[data-ux="NavigationDrawer"]');
-    if (firstDrawer) drawerId = firstDrawer.id;
-  }
-  if (!drawerId) return;
-
-  var drawer = document.getElementById(drawerId);
-  if (!drawer) return;
-
-  function setOpen(open){
-    if (open){
-      drawer.classList.add('cm-open');
-      drawer.style.display = 'block';
-      hamburger.setAttribute('aria-expanded', 'true');
-      try { document.documentElement.style.overflow = 'hidden'; document.body.style.overflow = 'hidden'; } catch(e){}
-    } else {
-      drawer.classList.remove('cm-open');
-      drawer.style.display = 'none';
-      hamburger.setAttribute('aria-expanded', 'false');
-      try { document.documentElement.style.overflow = 'auto'; document.body.style.overflow = 'auto'; } catch(e){}
-    }
-  }
-
-  // Start closed
-  setOpen(false);
-
-  hamburger.addEventListener('click', function (e) {
-    e.preventDefault();
-    var open = drawer.classList.contains('cm-open');
-    setOpen(!open);
-  });
-
-  // Close on X or on any element with data-close="true" inside drawer
-  qsa('[data-close="true"]', drawer).forEach(function(el){
-    el.addEventListener('click', function(e){
+    hamburger.addEventListener('click', function (e) {
       e.preventDefault();
+      e.stopPropagation();
+      setOpen(!isOpen());
+    });
+
+    // Close buttons inside drawer (X icon and links have data-close="true")
+    qsa('[data-close="true"]', drawer).forEach(function(el){
+      el.addEventListener('click', function(e){
+        e.preventDefault();
+        setOpen(false);
+      });
+    });
+
+    // Close when a nav link is clicked
+    qsa('a[href]', drawer).forEach(function(a){
+      a.addEventListener('click', function(){
+        setOpen(false);
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    // Click outside drawer closes (optional but helps)
+    document.addEventListener('click', function(e){
+      if (!isOpen()) return;
+      if (drawer.contains(e.target) || hamburger.contains(e.target)) return;
       setOpen(false);
     });
-  });
-
-  // Close when a nav link is clicked (better UX on mobile)
-  qsa('a[href]', drawer).forEach(function(a){
-    a.addEventListener('click', function(){
-      setOpen(false);
-    });
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') setOpen(false);
   });
 })();
 </script>
-
 </body>
 <!-- Mirrored from caringmindsbehavioralhealth.com/services%2Fcare by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Jan 2026 03:04:28 GMT -->
 </html>
