@@ -552,67 +552,25 @@ SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
 <style data-glamor="cxs-media-sheet">
 /* CM-FIX: local hero background across ALL breakpoints (matches GoDaddy 905 behavior) */
 @media (max-width: 450px){
-  .x .c1-y{background-image:linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg");}
+  .x .c1-y{background-image:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%), url("assets/hero.jpg");}
 }
 @media (min-width: 451px) and (max-width: 767px){
-  .x .c1-z{background-image:linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg");}
+  .x .c1-z{background-image:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%), url("assets/hero.jpg");}
 }
 @media (min-width: 768px) and (max-width: 1023px){
-  .x .c1-10{background-image:linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg");}
+  .x .c1-10{background-image:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%), url("assets/hero.jpg");}
 }
 @media (min-width: 1024px) and (max-width: 1279px){
-  .x .c1-11{background-image:linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg");}
+  .x .c1-11{background-image:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%), url("assets/hero.jpg");}
 }
 @media (min-width: 1280px) and (max-width: 1535px){
-  .x .c1-12{background-image:linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg");}
+  .x .c1-12{background-image:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%), url("assets/hero.jpg");}
 }
 @media (min-width: 1536px) and (max-width: 1920px){
-  .x .c1-13{background-image:linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg");}
+  .x .c1-13{background-image:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%), url("assets/hero.jpg");}
 }
 @media (min-width: 1921px){
-  .x .c1-14{background-image:linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg");}
+  .x .c1-14{background-image:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 100%), url("assets/hero.jpg");}
 }
 </style>
 <style data-glamor="cxs-xs-sheet">@media (max-width: 767px){.x .c1-l{padding-top:40px}}@media (max-width: 767px){.x .c1-m{padding-bottom:40px}}@media (max-width: 767px){.x .c1-6h{margin-top:0}}@media (max-width: 767px){.x .c1-6i{margin-right:auto}}@media (max-width: 767px){.x .c1-6j{margin-bottom:0}}@media (max-width: 767px){.x .c1-6k{margin-left:auto}}@media (max-width: 767px){.x .c1-8f > :nth-child(n){margin-bottom:16px}}@media (max-width: 767px){.x .c1-8g  > :last-child{margin-bottom:0 !important}}</style>
@@ -641,103 +599,119 @@ body{position:relative!important;}
 </style>
 
 
-
-
-
-
-<style id="cm-bottomhalf-only-halfpage">
-/* Hero stays half page as before */
-[data-ux="HeaderMedia"]{
-  min-height:50vh !important;
-  height:50vh !important;
-  max-height:50vh !important;
-}
-
-/* Background container */
+<style id="cm-no-bg-and-mobile-nav">
+/* --- Remove hero background completely (no image, no blur). Keep layout intact. --- */
 [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
-  position:relative !important;
-  overflow:hidden !important;
+  background-image: none !important;
+  background-color: #ffffff !important;
+}
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before,
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::after{
+  content: none !important;
+  background: none !important;
+  filter: none !important;
 }
 
-/* ONLY bottom 50% of the image, and it only occupies bottom 50% of hero */
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
-  content:"" !important;
-  position:absolute !important;
-  left:0 !important;
-  right:0 !important;
-  bottom:0 !important;
-  top:50% !important;                /* bottom half of hero only */
-
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(120, 85, 60, 0.22) 0%,      /* warm brown */
-      rgba(90, 130, 120, 0.18) 55%,    /* muted teal */
-      rgba(70, 150, 140, 0.14) 100%    /* soft teal */
-    ),
-    url("assets/hero.jpg") !important;
-
-  background-size:auto 200% !important; /* crop top 50% of image */
-  background-position:center bottom !important;
-  background-repeat:no-repeat !important;
-
-  filter: blur(60px) saturate(1.70) contrast(1.03) brightness(1.05) !important;
-  pointer-events:none !important;
-  z-index:0 !important;
+/* Hide any hero pictures/images so nothing sits behind/over nav */
+[data-ux="HeaderMedia"] picture,
+[data-ux="HeaderMedia"] img,
+[data-ux="HeaderMediaImage"]{
+  display: none !important;
 }
 
-/* Mobile tuning */
-@media (max-width:767px){
-  [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
-    filter: blur(38px) saturate(1.65) contrast(1.02) brightness(1.05) !important;
+/* --- Mobile nav drawer: make it work even without GoDaddy runtime JS --- */
+[data-ux="NavigationDrawer"]{
+  /* keep existing sizing from the template; just ensure we can animate */
+  will-change: transform;
+  transition: transform 250ms ease, visibility 0ms linear 250ms;
+  transform: translateX(-110%) !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 100000 !important;
+}
+
+/* Open state */
+[data-ux="NavigationDrawer"].cm-open{
+  transform: translateX(0) !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transition: transform 250ms ease;
+}
+
+/* Ensure hamburger + nav are tappable */
+[data-aid="HAMBURGER_MENU_LINK"]{
+  position: relative !important;
+  z-index: 100001 !important;
+}
+
+/* Close icon cursor */
+[data-ux="CloseIcon"]{ cursor: pointer; }
+
+/* Ensure drawer links are clickable */
+[data-ux="NavigationDrawer"] a,
+[data-ux="NavigationDrawer"] button,
+[data-ux="NavigationDrawer"] [role="menuitem"]{
+  pointer-events: auto !important;
+}
+</style>
+
+<script id="cm-mobile-drawer-js">
+(function(){
+  function qs(sel, root){ return (root||document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+
+  function getDrawerIdFromHamburger(a){
+    return a.getAttribute('toggleid') || a.getAttribute('toggleId') || a.getAttribute('aria-controls');
   }
-}
 
-/* Ensure content stays above background */
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] > *,
-[data-ux="HeaderMedia"] nav{
-  position:relative !important;
-  z-index:3 !important;
-}
-</style>
+  function openDrawer(drawer){
+    if(!drawer) return;
+    drawer.classList.add('cm-open');
+  }
+  function closeDrawer(drawer){
+    if(!drawer) return;
+    drawer.classList.remove('cm-open');
+  }
+  function toggleDrawer(drawer){
+    if(!drawer) return;
+    drawer.classList.toggle('cm-open');
+  }
 
+  document.addEventListener('click', function(e){
+    const hamburger = e.target.closest('[data-aid="HAMBURGER_MENU_LINK"]');
+    if(hamburger){
+      e.preventDefault();
+      const drawerId = getDrawerIdFromHamburger(hamburger);
+      const drawer = drawerId ? document.getElementById(drawerId) : qs('[data-ux="NavigationDrawer"]');
+      toggleDrawer(drawer);
+      return;
+    }
 
-<style id="cm-force-max-blur">
-/* FORCE blur on background overlay so image details disappear */
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
-  position: relative !important;
-  overflow: hidden !important;
-}
+    const closeIcon = e.target.closest('[data-ux="CloseIcon"][data-close="true"], [data-ux="CloseIcon"][data-close], [data-close="true"]');
+    if(closeIcon){
+      const drawer = e.target.closest('[data-ux="NavigationDrawer"]') || qs('[data-ux="NavigationDrawer"].cm-open');
+      if(drawer) closeDrawer(drawer);
+      return;
+    }
 
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
-  content:"" !important;
-  position:absolute !important;
-  left:0; right:0; bottom:0; top:50%;
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(120,85,60,0.24),
-      rgba(90,130,120,0.20),
-      rgba(70,150,140,0.16)
-    ),
-    url("assets/hero.jpg") !important;
+    // Tap outside drawer to close (optional, but helpful)
+    const openDrawerEl = qs('[data-ux="NavigationDrawer"].cm-open');
+    if(openDrawerEl && !e.target.closest('[data-ux="NavigationDrawer"]')){
+      // ignore taps on hamburger (handled above)
+      closeDrawer(openDrawerEl);
+    }
+  }, true);
 
-  background-size:auto 200% !important;
-  background-position:center bottom !important;
-  background-repeat:no-repeat !important;
-
-  filter: blur(70px) saturate(1.8) brightness(1.06) !important;
-  transform: scale(1.12) !important;
-
-  pointer-events:none !important;
-  z-index:0 !important;
-}
-
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] > *{
-  position: relative !important;
-  z-index: 2 !important;
-}
-</style>
+  // Close drawer when a nav link is tapped
+  document.addEventListener('click', function(e){
+    const link = e.target.closest('[data-ux="NavigationDrawer"] a[data-close="true"], [data-ux="NavigationDrawer"] a');
+    if(link){
+      const drawer = e.target.closest('[data-ux="NavigationDrawer"]');
+      if(drawer) closeDrawer(drawer);
+    }
+  }, true);
+})();
+</script>
 
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
