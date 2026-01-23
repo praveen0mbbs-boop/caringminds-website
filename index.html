@@ -641,6 +641,28 @@ body{position:relative!important;}
   z-index: 1 !important;
 }
 </style>
+<style id="cm-mobile-nav-fix">
+/* Ensure hero visuals never block taps/clicks on mobile nav */
+[data-ux="HeaderMediaImage"],
+[data-ux="HeaderMediaBackground"]::before{
+  pointer-events: none !important;
+}
+
+/* Keep nav + hamburger above any hero layers */
+[data-ux="HeaderMedia"] nav,
+[data-aid="HAMBURGER_MENU_LINK"],
+[data-ux="NavigationDrawer"]{
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
+/* If the right-side hero image column overlays on small screens, hide it */
+@media (max-width: 767px){
+  [data-ux="HeaderMediaImage"]{
+    display: none !important;
+  }
+}
+</style>
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
 
