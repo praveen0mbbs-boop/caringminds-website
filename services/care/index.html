@@ -571,6 +571,65 @@ body{position:relative!important;}
 /* force header/nav visible even if builder expected JS */
 [data-ux="Header"], [data-ux^="Nav"], nav{visibility:visible!important; opacity:1!important;}
 </style>
+<style id="cm-mobile-active-underline">
+/* Mobile drawer: underline the selected/current page link */
+[data-ux="NavigationDrawer"] a.cm-active,
+[data-ux="NavigationDrawer"] a[aria-current="page"]{
+  text-decoration: underline !important;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+
+/* Optional: also show underline on hover/focus inside drawer */
+[data-ux="NavigationDrawer"] a:hover,
+[data-ux="NavigationDrawer"] a:focus{
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+</style>
+
+<style id="cm-mobile-drawer-fullscreen">/* Force the mobile navigation drawer to truly cover the full viewport */
+[data-ux="NavigationDrawer"]{
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: translateX(-110%) !important; /* closed by default */
+  transition: transform .25s ease !important;
+  background: rgba(0,0,0,.92) !important;
+  overflow: hidden !important;
+  z-index: 9998 !important;
+}
+[data-ux="NavigationDrawer"].cm-open{
+  transform: translateX(0) !important;
+}
+
+/* Make inner container span full drawer */
+[data-ux="NavigationDrawer"] > [data-ux="Container"],
+[data-ux="NavigationDrawer"] [id$="navContainerId-mobile"]{
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure the list area scrolls if needed */
+[data-ux="NavigationDrawer"] [data-ux="NavigationDrawerList"],
+[data-ux="NavigationDrawer"] [id$="navListId-mobile"]{
+  max-height: calc(100vh - 70px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}</style>
+
 </head>
 <body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat"><body class="x  x-fonts-muli x-fonts-source-sans-pro x-fonts-montserrat">
 
@@ -651,7 +710,7 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
-  width: 100vw !important;
+  width: min(86vw, 420px) !important;
   height: 100vh !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
@@ -674,8 +733,7 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
   color: #fff !important;
 }
 </style>
-<script id="cm-nav-toggle">
-(function () {
+<script id="cm-nav-toggle">(function () {
   function ready(fn){
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn);
     else fn();
@@ -732,19 +790,15 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
       setOpen(!isOpen());
     });
 
-    // Close elements inside drawer (X icon and GoDaddy links often have data-close="true")
+    // Close buttons inside drawer (X icon and any element marked data-close="true")
+    // IMPORTANT: many drawer links have data-close="true" — do NOT prevent navigation.
     qsa('[data-close="true"]', drawer).forEach(function(el){
       el.addEventListener('click', function(e){
-        // If it's a real link, let the browser navigate; just close the drawer for UX.
-        if (el.tagName === 'A') {
-          var href = el.getAttribute('href') || '';
-          if (href && href !== '#') {
-            setOpen(false);
-            return; // no preventDefault
-          }
+        var tag = (el.tagName || '').toUpperCase();
+        var href = (tag === 'A') ? (el.getAttribute('href') || '') : '';
+        if (tag !== 'A' || !href || href === '#'){
+          e.preventDefault();
         }
-        // Otherwise treat as a pure close control (e.g., X icon)
-        e.preventDefault();
         setOpen(false);
       });
     });
@@ -768,8 +822,89 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
       setOpen(false);
     });
   });
+})();</script>
+<script id="cm-mobile-active-link">
+(function(){
+  function normPath(p){
+    if (!p) return "/";
+    // remove query/hash already not present, ensure leading slash
+    p = p.split("?")[0].split("#")[0];
+    if (!p.startsWith("/")) p = "/" + p;
+    // treat /index.html as /
+    if (p.endsWith("/index.html")) p = p.slice(0, -"/index.html".length) + "/";
+    // ensure trailing slash for directory-like paths (except root)
+    if (p !== "/" && !p.endsWith("/")) p = p + "/";
+    return p;
+  }
+
+  var current = normPath(location.pathname);
+
+  // Find the mobile drawer container (works with GoDaddy/ux2 markup)
+  var drawer = document.querySelector('[data-ux="NavigationDrawer"]');
+  if (!drawer) return;
+
+  var links = drawer.querySelectorAll('a[href]');
+  var best = null;
+
+  for (var i=0;i<links.length;i++){
+    var a = links[i];
+    var href = a.getAttribute('href') || "";
+    // ignore placeholders
+    if (href === "#" || href.indexOf("javascript:") === 0) continue;
+
+    // Make href comparable: only path part; handle absolute URLs
+    var url;
+    try { url = new URL(href, location.origin); }
+    catch(e){ continue; }
+
+    var p = normPath(url.pathname);
+
+    // Exact match wins
+    if (p === current){
+      best = a;
+      break;
+    }
+
+    // Otherwise pick the longest prefix match (useful for sections)
+    if (current.indexOf(p) === 0){
+      if (!best || p.length > normPath((new URL(best.getAttribute('href'), location.origin)).pathname).length){
+        best = a;
+      }
+    }
+  }
+
+  // Clear any previous
+  for (var j=0;j<links.length;j++){
+    links[j].classList.remove('cm-active');
+    links[j].removeAttribute('aria-current');
+  }
+
+  if (best){
+    best.classList.add('cm-active');
+    best.setAttribute('aria-current','page');
+  }
 })();
 </script>
+
+<script id="cm-mobile-drawer-lock">
+(function(){
+  var drawer = document.querySelector('[data-ux="NavigationDrawer"]');
+  if(!drawer) return;
+
+  var observer = new MutationObserver(function(){
+    if(drawer.classList.contains('cm-open')){
+      document.documentElement.classList.add('cm-drawer-open');
+      document.body.classList.add('cm-drawer-open');
+    } else {
+      document.documentElement.classList.remove('cm-drawer-open');
+      document.body.classList.remove('cm-drawer-open');
+    }
+  });
+
+  observer.observe(drawer, {attributes:true, attributeFilter:['class']});
+})();
+</script>
+
 </body>
 <!-- Mirrored from caringmindsbehavioralhealth.com/services%2Fcare by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Jan 2026 03:04:28 GMT -->
 </html>
