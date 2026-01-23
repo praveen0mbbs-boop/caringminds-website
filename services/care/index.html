@@ -651,7 +651,7 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
-  width: min(86vw, 420px) !important;
+  width: 100vw !important;
   height: 100vh !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
@@ -732,9 +732,18 @@ try{document.documentElement.style.overflow='auto';document.body.style.overflow=
       setOpen(!isOpen());
     });
 
-    // Close buttons inside drawer (X icon and links have data-close="true")
+    // Close elements inside drawer (X icon and GoDaddy links often have data-close="true")
     qsa('[data-close="true"]', drawer).forEach(function(el){
       el.addEventListener('click', function(e){
+        // If it's a real link, let the browser navigate; just close the drawer for UX.
+        if (el.tagName === 'A') {
+          var href = el.getAttribute('href') || '';
+          if (href && href !== '#') {
+            setOpen(false);
+            return; // no preventDefault
+          }
+        }
+        // Otherwise treat as a pure close control (e.g., X icon)
         e.preventDefault();
         setOpen(false);
       });
