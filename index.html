@@ -600,75 +600,62 @@ body{position:relative!important;}
 
 
 
-<style id="cm-brand-tint-bottomhalf-only">
-/* Keep original layout; only adjust background rendering */
-/* Ensure the background wrapper can host our clipped overlay */
-[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
-  position: relative !important;
-  overflow: hidden !important;
-  background-image: none !important; /* we'll draw our own clipped, blurred version */
+
+
+
+<style id="cm-bottomhalf-only-halfpage">
+/* Hero stays half page as before */
+[data-ux="HeaderMedia"]{
+  min-height:50vh !important;
+  height:50vh !important;
+  max-height:50vh !important;
 }
 
-/* Draw blurred/tinted background ONLY on the bottom half */
+/* Background container */
+[data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]{
+  position:relative !important;
+  overflow:hidden !important;
+}
+
+/* ONLY bottom 50% of the image, and it only occupies bottom 50% of hero */
 [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
   content:"" !important;
   position:absolute !important;
   left:0 !important;
   right:0 !important;
   bottom:0 !important;
-  top:0 !important; /* use only bottom half of image mapped to full area */
+  top:50% !important;                /* bottom half of hero only */
+
   background-image:
     linear-gradient(
       180deg,
-      rgba(0, 120, 160, 0.20) 0%,
-      rgba(0, 150, 140, 0.16) 55%,
-      rgba(0, 170, 150, 0.12) 100%
+      rgba(0,120,160,0.20) 0%,
+      rgba(0,150,140,0.16) 55%,
+      rgba(0,170,150,0.12) 100%
     ),
     url("assets/hero.jpg") !important;
-  background-size: auto 200% !important;
-  background-position: center bottom !important;
-  background-repeat: no-repeat !important;
 
-  /* More saturation pop without darkening */
-  filter: blur(42px) saturate(1.55) contrast(1.06) !important;
+  background-size:auto 200% !important; /* crop top 50% of image */
+  background-position:center bottom !important;
+  background-repeat:no-repeat !important;
 
-  /* Avoid blurred edges showing a hard line at the 50% cut */
-  transform: scale(1.08) !important;
-  transform-origin: center !important;
-
-  z-index: 0 !important;
+  filter:blur(40px) saturate(1.55) contrast(1.06) !important;
   pointer-events:none !important;
+  z-index:0 !important;
 }
 
-/* Different blur strength on mobile vs desktop */
-@media (max-width: 767px){
+/* Mobile tuning */
+@media (max-width:767px){
   [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"]::before{
-    filter: blur(28px) saturate(1.50) contrast(1.04) !important;
+    filter:blur(28px) saturate(1.5) contrast(1.04) !important;
   }
 }
 
-/* Ensure hero content stays above the background overlay (no other changes) */
+/* Ensure content stays above background */
 [data-ux="HeaderMediaBackground"][data-aid="BACKGROUND_IMAGE_RENDERED"] > *,
 [data-ux="HeaderMedia"] nav{
-  position: relative !important;
-  z-index: 3 !important;
-}
-
-/* Keep mobile navigation always clickable (images/overlays can't block taps) */
-[data-ux="HeaderMedia"] picture,
-[data-ux="HeaderMedia"] img,
-[data-ux="HeaderMediaImage"]{
-  pointer-events: none !important;
-}
-[data-aid="HAMBURGER_MENU_LINK"],
-[data-ux="NavigationDrawer"]{
-  position: relative !important;
-  z-index: 100000 !important;
-}
-[data-ux="NavigationDrawer"] a,
-[data-ux="NavigationDrawer"] button,
-[data-ux="NavigationDrawer"] [role="menuitem"]{
-  pointer-events: auto !important;
+  position:relative !important;
+  z-index:3 !important;
 }
 </style>
 
