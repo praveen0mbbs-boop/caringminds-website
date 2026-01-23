@@ -913,6 +913,31 @@ document.addEventListener("click", function(e){
 }, true);
 </script>
 
+
+<script id="cm-drawer-observer-fix">
+(function(){
+  const drawer = document.querySelector('[data-ux="NavigationDrawer"]');
+  if(!drawer) return;
+
+  const htmlEl = document.documentElement;
+
+  function sync(){
+    if(drawer.classList.contains('cm-open')){
+      htmlEl.classList.add('cm-drawer-open');
+    } else {
+      htmlEl.classList.remove('cm-drawer-open');
+    }
+  }
+
+  // Run immediately
+  sync();
+
+  // Observe class changes so it reacts instantly (no click required)
+  const obs = new MutationObserver(sync);
+  obs.observe(drawer, { attributes:true, attributeFilter:['class'] });
+})();
+</script>
+
 </body>
 <!-- Mirrored from caringmindsbehavioralhealth.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Jan 2026 03:04:14 GMT -->
 </html>
